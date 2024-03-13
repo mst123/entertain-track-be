@@ -10,7 +10,7 @@ import { UserModel } from '@models/users.model';
 const createToken = (user: User): TokenData => {
   const dataStoredInToken: DataStoredInToken = { _id: user._id };
   const expiresIn: number = 60 * 60;
-
+  // jwt 在外边又包了一层
   return { expiresIn, token: sign(dataStoredInToken, SECRET_KEY, { expiresIn }) };
 };
 
@@ -25,13 +25,14 @@ export class AuthService {
     if (findUser) throw new HttpException(409, `This email ${userData.email} already exists`);
 
     const hashedPassword = await hash(userData.password, 10);
-    const createUserData: User = await UserModel.create({ ...userData, password: hashedPassword });
+    // TODO 不允许注册超级管理员
+    const createUserData: User = await UserModel.create({ ...userData, password: hashedPassword, userPermission: 'user' });
 
     return createUserData;
   }
 
   public async login(userData: User): Promise<{ cookie: string; findUser: User }> {
-    const findUser: User = await UserModel.findOne({ email: userData.email });
+    const findUser: User = await UserModel.findOne({ email: userData.email }).select('+password');
     if (!findUser) throw new HttpException(409, `This email ${userData.email} was not found`);
 
     const isPasswordMatching: boolean = await compare(userData.password, findUser.password);

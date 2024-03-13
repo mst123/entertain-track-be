@@ -12,6 +12,7 @@ export const dbConnection = async () => {
 
   if (NODE_ENV !== 'production') {
     set('debug', true);
+    set('strictQuery', true);
   }
 
   await connect(dbConfig.url, dbConfig.options);

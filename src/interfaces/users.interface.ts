@@ -4,6 +4,11 @@ export interface User extends Document {
   username: string;
   password: string;
   email: string;
+  photo?: String;
   registrationDate: Date;
-  userPermission: '普通用户' | '管理员';
+  userPermission: 'admin' | 'user';
+  passwordChangedAt?: Date;
+  passwordResetToken?: String;
+  passwordResetExpires?: Number;
+  active: boolean;
 }

@@ -4,6 +4,7 @@ import { HttpException } from '@exceptions/httpException';
 import { User } from '@interfaces/users.interface';
 import { UserModel } from '@models/users.model';
 
+// 通过依赖注入的方式使用这个服务，而不需要手动实例化
 @Service()
 export class UserService {
   public async findAllUser(): Promise<User[]> {
@@ -21,10 +22,9 @@ export class UserService {
   public async createUser(userData: User): Promise<User> {
     const findUser: User = await UserModel.findOne({ email: userData.email });
     if (findUser) throw new HttpException(409, `This email ${userData.email} already exists`);
-
+    // 密码加密 自带加盐操作
     const hashedPassword = await hash(userData.password, 10);
     const createUserData: User = await UserModel.create({ ...userData, password: hashedPassword });
-
     return createUserData;
   }
 
@@ -36,7 +36,7 @@ export class UserService {
 
     if (userData.password) {
       const hashedPassword = await hash(userData.password, 10);
-      userData = { ...userData, password: hashedPassword };
+      userData = { ...userData, password: hashedPassword } as User;
     }
 
     const updateUserById: User = await UserModel.findByIdAndUpdate(userId, { userData });

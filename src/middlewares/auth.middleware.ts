@@ -15,6 +15,7 @@ const getAuthorization = req => {
   return null;
 };
 
+// TODO 用户校验 未考虑用户登录后修改密码
 export const AuthMiddleware = async (req: RequestWithUser, res: Response, next: NextFunction) => {
   try {
     const Authorization = getAuthorization(req);
@@ -35,4 +36,14 @@ export const AuthMiddleware = async (req: RequestWithUser, res: Response, next: 
   } catch (error) {
     next(new HttpException(401, 'Wrong authentication token'));
   }
+};
+
+// 校验用户的角色
+export const RoleMiddleware = (roles: string[]) => {
+  return async (req: RequestWithUser, res: Response, next: NextFunction) => {
+    if (!roles.includes(req.user.userPermission)) {
+      next(new HttpException(403, 'Unauthorized'));
+    }
+    next();
+  };
 };
