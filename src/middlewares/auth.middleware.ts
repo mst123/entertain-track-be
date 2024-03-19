@@ -15,7 +15,7 @@ const getAuthorization = req => {
   return null;
 };
 
-// TODO 用户校验 未考虑用户登录后修改密码
+// 用户校验
 export const AuthMiddleware = async (req: RequestWithUser, res: Response, next: NextFunction) => {
   try {
     const Authorization = getAuthorization(req);
@@ -31,7 +31,7 @@ export const AuthMiddleware = async (req: RequestWithUser, res: Response, next: 
         next(new HttpException(401, 'Wrong authentication token'));
       }
     } else {
-      next(new HttpException(404, 'Authentication token missing'));
+      next(new HttpException(401, 'Authentication token missing'));
     }
   } catch (error) {
     next(new HttpException(401, 'Wrong authentication token'));
@@ -42,6 +42,17 @@ export const AuthMiddleware = async (req: RequestWithUser, res: Response, next: 
 export const RoleMiddleware = (roles: string[]) => {
   return async (req: RequestWithUser, res: Response, next: NextFunction) => {
     if (!roles.includes(req.user.userPermission)) {
+      next(new HttpException(403, 'Unauthorized'));
+    }
+    next();
+  };
+};
+
+// 校验登录用户是否是当前用户
+export const IsMeMiddleware = (userId: string) => {
+  return async (req: RequestWithUser, res: Response, next: NextFunction) => {
+    const currentUserId = userId || req.params.id;
+    if (req.user._id !== currentUserId) {
       next(new HttpException(403, 'Unauthorized'));
     }
     next();

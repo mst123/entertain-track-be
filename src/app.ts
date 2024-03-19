@@ -84,4 +84,8 @@ export class App {
   private initializeErrorHandling() {
     this.app.use(ErrorMiddleware);
   }
+
+  private getMyAnimeListDataBase() {
+    return dbConnection;
+  }
 }

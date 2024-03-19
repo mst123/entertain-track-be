@@ -4,9 +4,13 @@ import { User } from '@interfaces/users.interface';
 export interface DataStoredInToken {
   _id: string;
 }
-
+export interface Refresh {
+  expiresIn: Number;
+  refreshToken: String;
+}
 export interface TokenData {
-  token: string;
+  refresh?: Refresh;
+  accessToken: string;
   expiresIn: number;
 }
 

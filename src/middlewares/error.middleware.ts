@@ -11,7 +11,12 @@ export const ErrorMiddleware = (error: HttpException, req: Request, res: Respons
     if (NODE_ENV === 'development') {
       console.log(error);
     }
-    res.status(status).json({ message });
+    res.status(status).json({
+      status: 'error',
+      data: {
+        message,
+      },
+    });
   } catch (error) {
     next(error);
   }
