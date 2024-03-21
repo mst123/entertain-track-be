@@ -1,6 +1,5 @@
 import { Document } from 'mongoose';
-
-export interface User extends Document {
+interface UserBase {
   username: string;
   password: string;
   email: string;
@@ -12,3 +11,6 @@ export interface User extends Document {
   passwordResetExpires?: Number;
   active: boolean;
 }
+
+export interface User extends Document, UserBase {}
+export type RequestUser = UserBase;

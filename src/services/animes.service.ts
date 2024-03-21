@@ -35,4 +35,22 @@ export class AnimeService {
 
     return deleteAnimeById;
   }
+
+  public async findMissingAnime(): Promise<number[]> {
+    // const animes: Anime[] = await AnimeModel.find();
+    // 创建一个包含所有存在的 rank 值的 Set
+    // const existingRanks = new Set(animes.map(anime => anime.rank));
+
+    // // 创建一个包含所有期望的 rank 值的 Set
+    // const expectedRanks = new Set(Array.from({ length: 10000 }, (_, i) => i + 1));
+
+    // // 计算缺失的 rank
+    // const missingRanks = [...expectedRanks].filter(rank => !existingRanks.has(rank));
+
+    const missingRanks = await AnimeModel.aggregate([
+      { $group: { _id: null, ranks: { $push: '$rank' } } },
+      { $project: { _id: 0, missingRanks: { $setDifference: [{ $range: [1, 10001] }, '$ranks'] } } },
+    ]);
+    return missingRanks[0].missingRanks;
+  }
 }

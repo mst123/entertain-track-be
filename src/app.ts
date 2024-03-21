@@ -8,12 +8,12 @@ import hpp from 'hpp';
 import morgan from 'morgan';
 import swaggerJSDoc from 'swagger-jsdoc';
 import swaggerUi from 'swagger-ui-express';
-import { NODE_ENV, PORT, LOG_FORMAT, ORIGIN, CREDENTIALS } from '@config';
+import { NODE_ENV, PORT, LOG_FORMAT, ORIGIN, CREDENTIALS, IS_SPIDER_MODEL } from '@config';
 import { dbConnection } from '@database';
 import { Routes } from '@interfaces/routes.interface';
 import { ErrorMiddleware } from '@middlewares/error.middleware';
 import { logger, stream } from '@utils/logger';
-
+import { AnimeSpider } from '@/utils/sync-my-anime';
 export class App {
   public app: express.Application;
   public env: string;
@@ -29,6 +29,8 @@ export class App {
     this.initializeRoutes(routes);
     this.initializeSwagger();
     this.initializeErrorHandling();
+    // 从MyAnimeList获取数据
+    IS_SPIDER_MODEL && this.getMyAnimeListDataBase();
   }
 
   public listen() {
@@ -86,6 +88,7 @@ export class App {
   }
 
   private getMyAnimeListDataBase() {
-    return dbConnection;
+    const animeSpider = new AnimeSpider();
+    animeSpider.start();
   }
 }

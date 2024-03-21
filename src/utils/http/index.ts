@@ -1,16 +1,13 @@
 import Axios, { type AxiosInstance, type Method, type AxiosRequestConfig, type AxiosResponse, type CustomParamsSerializer } from 'axios';
-import { config } from 'dotenv';
 import { stringify } from 'qs';
 
 // 相关配置请参考：www.axios-js.com/zh-cn/docs/#axios-request-config-1
 const defaultConfig: AxiosRequestConfig = {
   // 请求超时时间
-  timeout: 20000,
+  timeout: 30000,
   baseURL: 'https://api.myanimelist.net/v2/',
   headers: {
-    Accept: 'application/json, text/plain, */*',
-    'Content-Type': 'application/json',
-    'X-Requested-With': 'XMLHttpRequest',
+    'X-MAL-CLIENT-ID': '6ce00a71791d4866699ec1de1bea1811',
   },
   // 数组格式参数序列化（https://github.com/axios/axios/issues/5142）
   paramsSerializer: {
@@ -73,4 +70,4 @@ class MyHttp {
   }
 }
 
-export const http = new MyHttp();
+export const myHttp = new MyHttp();

@@ -17,5 +17,7 @@ export class AnimeRoute implements Routes {
     this.router.post(`${this.path}`, this.anime.createAnime);
     this.router.put(`${this.path}/:id`, this.anime.updateAnime);
     this.router.delete(`${this.path}/:id`, this.anime.deleteAnime);
+
+    this.router.post(`${this.path}/findMissingAnime`, this.anime.findMissingAnime);
   }
 }

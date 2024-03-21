@@ -1,16 +1,15 @@
-import { createClient } from 'redis';
+import Redis from 'ioredis';
 
-(async () => {
-  //创建redis客户端
-  const redis = createClient({
-    url: 'redis://127.0.0.1:6379',
-    legacyMode: true,
-  });
-  //连接
-  await redis.connect();
-  //set
-  await redis.set('test', '123');
-  //get
-  const value = await redis.get('test');
-  console.log(value); //123
-})();
+export const CURRENT_OFFSET = 'CURRENT_OFFSET';
+// 创建 Redis 客户端实例
+export const redisClient = new Redis({
+  host: '127.0.0.1', // Redis 服务器地址
+  port: 6379, // Redis 服务器端口号
+});
+
+redisClient.config('SET', 'save', '60 1');
+
+// 监听 Redis 连接错误
+redisClient.on('error', err => {
+  console.error('Redis client error:', err);
+});

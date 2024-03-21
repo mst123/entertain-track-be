@@ -1,4 +1,5 @@
 import { Document } from 'mongoose';
+import { type } from 'os';
 
 // 定义枚举类型
 type NSFW = 'white' | 'gray' | 'black';
@@ -10,7 +11,7 @@ type NSFW = 'white' | 'gray' | 'black';
 // Special = 'special', // 特别版
 // ONA = 'ona', // 原创网络动画
 // Music = 'music', // 音乐
-type MediaType = 'unknown' | 'tv' | 'ova' | 'movie' | 'special' | 'ona' | 'music';
+type MediaType = 'unknown' | 'tv' | 'ova' | 'movie' | 'special' | 'ona' | 'music' | 'tv_special';
 
 // FinishedAiring = 'finished_airing', // 已完结
 // CurrentlyAiring = 'currently_airing', // 当前正在播放
@@ -26,6 +27,62 @@ type Status = 'finished_airing' | 'currently_airing' | 'not_yet_aired';
 
 type Rating = 'g' | 'pg' | 'pg_13' | 'r' | 'r+' | 'rx';
 
+type Source =
+  | 'other'
+  | 'original'
+  | 'manga'
+  | '4_koma_manga'
+  | 'web_manga'
+  | 'digital_manga'
+  | 'novel'
+  | 'light_novel'
+  | 'visual_novel'
+  | 'game'
+  | 'card_game'
+  | 'book'
+  | 'picture_book'
+  | 'radio'
+  | 'music'
+  | 'mixed_media';
+
+export type Fields =
+  | 'id'
+  | 'title'
+  | 'main_picture'
+  | 'alternative_titles'
+  | 'synonyms_or_iso639_1'
+  | 'start_date'
+  | 'end_date'
+  | 'synopsis'
+  | 'mean'
+  | 'rank'
+  | 'popularity'
+  | 'num_list_users'
+  | 'num_scoring_users'
+  | 'nsfw'
+  | 'genres'
+  | 'media_type'
+  | 'status'
+  | 'my_list_status'
+  | 'num_episodes'
+  | 'start_season'
+  | 'broadcast'
+  | 'source'
+  | 'average_episode_duration'
+  | 'rating'
+  | 'studios'
+  | 'pictures'
+  | 'background'
+  | 'related_anime'
+  | 'related_manga'
+  | 'recommendations'
+  | 'statistics';
+
+export interface AnimeListRequest {
+  offset: number;
+  limit: number;
+  fields: `${Fields}`;
+}
 // 定义子文档 Schema
 interface MainPicture {
   medium: string; // 缩略图链接
@@ -109,7 +166,8 @@ interface Broadcast {
 }
 
 // Anime 文档的接口定义
-export interface Anime extends Document {
+export interface AnimeBase {
+  id: number;
   title: string; // 标题
   main_picture: MainPicture; // 主图片
   alternative_titles: AlternativeTitles; // 别名
@@ -128,7 +186,7 @@ export interface Anime extends Document {
   num_episodes: number; // 集数
   start_season: StartSeason; // 开播季节
   broadcast: Broadcast; // 播出信息
-  source: string; // 来源
+  source: Source; // 来源
   average_episode_duration: number; // 平均集长
   rating: Rating; // 分级
   studios: Studio[]; // 工作室
@@ -138,4 +196,8 @@ export interface Anime extends Document {
   related_manga: RelatedManga[]; // 相关漫画
   recommendations: Recommendation[]; // 推荐
   statistics: Statistics; // 统计信息
+  [key: string]: any;
+}
+export interface Anime extends Document, AnimeBase {
+  id: number;
 }

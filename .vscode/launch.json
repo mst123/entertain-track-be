@@ -8,6 +8,12 @@
             "command": "npm run dev"
         },
         {
+          "type": "node-terminal",
+          "request": "launch",
+          "name": "Spider typescript-express-starter",
+          "command": "npm run spider"
+        },
+        {
             "type": "node-terminal",
             "request": "launch",
             "name": "Start typescript-express-starter",

@@ -60,4 +60,13 @@ export class AnimeController {
       next(error);
     }
   };
+
+  public findMissingAnime = async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const missRanks: number[] = await this.anime.findMissingAnime();
+      res.status(200).json({ data: missRanks, status: 'success', message: 'findMissingAnime' });
+    } catch (error) {
+      next(error);
+    }
+  };
 }

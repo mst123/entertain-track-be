@@ -1,7 +1,7 @@
 import { hash } from 'bcrypt';
 import { Service } from 'typedi';
 import { HttpException } from '@exceptions/httpException';
-import { User } from '@interfaces/users.interface';
+import { User, RequestUser } from '@interfaces/users.interface';
 import { UserModel } from '@models/users.model';
 
 // 通过依赖注入的方式使用这个服务，而不需要手动实例化
@@ -28,7 +28,7 @@ export class UserService {
     return createUserData;
   }
 
-  public async updateUser(userId: string, userData: User): Promise<User> {
+  public async updateUser(userId: string, userData: RequestUser): Promise<User> {
     if (userData.email) {
       const findUser: User = await UserModel.findOne({ email: userData.email });
       if (findUser && findUser._id != userId) throw new HttpException(409, `This email ${userData.email} already exists`);

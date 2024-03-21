@@ -3,6 +3,11 @@ import { Anime } from '@/interfaces/animes.interface';
 
 // Anime 的 Schema 定义
 const AnimeSchema = new Schema<Anime>({
+  id: {
+    // 原始id
+    type: Number,
+    required: true,
+  },
   title: String, // 标题
   main_picture: {
     // 主图片
@@ -41,7 +46,7 @@ const AnimeSchema = new Schema<Anime>({
   // 媒体类型
   media_type: {
     type: String,
-    enum: ['unknown', 'tv', 'ova', 'movie', 'special', 'ona', 'music'],
+    enum: ['unknown', 'tv', 'ova', 'movie', 'special', 'ona', 'music', 'tv_special'],
   },
   // 播放状态
   status: {
@@ -62,7 +67,24 @@ const AnimeSchema = new Schema<Anime>({
   // 来源
   source: {
     type: String,
-    enum: ['unknown', 'tv', 'ova', 'movie', 'special', 'ona', 'music'],
+    enum: [
+      'other',
+      'original',
+      'manga',
+      '4_koma_manga',
+      'web_manga',
+      'digital_manga',
+      'novel',
+      'light_novel',
+      'visual_novel',
+      'game',
+      'card_game',
+      'book',
+      'picture_book',
+      'radio',
+      'music',
+      'mixed_media',
+    ],
   },
   average_episode_duration: Number, // 平均集长
   // 分级
@@ -145,5 +167,7 @@ const AnimeSchema = new Schema<Anime>({
     num_list_users: Number, // 列表用户数量
   },
 });
+// 建立id的索引
+AnimeSchema.index({ id: 1 });
 
 export const AnimeModel = model<Anime & Document>('Anime', AnimeSchema);
