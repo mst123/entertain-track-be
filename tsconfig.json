@@ -1,26 +1,26 @@
 {
-  "compileOnSave": false,
+  "compileOnSave": false, // 是否在保存时编译
   "compilerOptions": {
-    "target": "es2017",
-    "lib": ["es2017", "esnext.asynciterable"],
-    "typeRoots": ["node_modules/@types"],
-    "allowSyntheticDefaultImports": true,
-    "experimentalDecorators": true,
-    "emitDecoratorMetadata": true,
-    "forceConsistentCasingInFileNames": true,
-    "moduleResolution": "node",
-    "module": "commonjs",
-    "pretty": true,
-    "sourceMap": true,
-    "declaration": true,
-    "outDir": "dist",
-    "allowJs": true,
-    "noEmit": false,
-    "esModuleInterop": true,
-    "resolveJsonModule": true,
-    "importHelpers": true,
-    "baseUrl": "src",
-    "paths": {
+    "target": "es2017", // 编译目标为 ES2017
+    "lib": ["es2017", "esnext.asynciterable"], // 使用的库
+    "typeRoots": ["node_modules/@types"], // 类型定义文件的根目录
+    "allowSyntheticDefaultImports": true, // 允许合成默认导入
+    "experimentalDecorators": true, // 启用实验性装饰器
+    "emitDecoratorMetadata": true, // 发射装饰器元数据
+    "forceConsistentCasingInFileNames": true, // 强制文件名大小写一致
+    "moduleResolution": "node", // 模块解析策略
+    "module": "commonjs", // 模块系统
+    "pretty": true, // 输出漂亮的错误信息
+    "sourceMap": true, // 生成源映射文件
+    "declaration": true, // 生成声明文件
+    "outDir": "dist", // 输出目录
+    "allowJs": true, // 允许编译 JavaScript 文件
+    "noEmit": false, // 是否生成输出文件
+    "esModuleInterop": true, // 启用 ES 模块互操作性
+    "resolveJsonModule": true, // 解析 JSON 模块
+    "importHelpers": true, // 导入辅助工具函数
+    "baseUrl": "src", // 基本路径
+    "paths": { // 路径映射
       "@/*": ["*"],
       "@config": ["config"],
       "@controllers/*": ["controllers/*"],
@@ -35,6 +35,6 @@
       "@utils/*": ["utils/*"]
     }
   },
-  "include": ["src/**/*.ts", "src/**/*.json", ".env"],
-  "exclude": ["node_modules", "src/http", "src/logs"]
+  "include": ["src/**/*.ts", "src/**/*.json", ".env"], // 包含的文件
+  "exclude": ["node_modules", "src/http", "src/logs"] // 排除的文件
 }

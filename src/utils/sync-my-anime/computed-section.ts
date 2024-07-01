@@ -5,8 +5,8 @@ export type MissingRanks = [offset: number, limit: number][];
 const anime = Container.get(AnimeService);
 // 接口limit最大值
 const LIMIT_MAX = 100;
-export async function getMissingRanks(): Promise<MissingRanks> {
-  const missRanks: number[] = await anime.findMissingAnime();
+export async function getMissingRanks(scope: number): Promise<MissingRanks> {
+  const missRanks: number[] = await anime.findMissingAnime(scope);
   return countConsecutiveNumbers(missRanks);
 }
 

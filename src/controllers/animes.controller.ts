@@ -63,7 +63,8 @@ export class AnimeController {
 
   public findMissingAnime = async (req: Request, res: Response, next: NextFunction) => {
     try {
-      const missRanks: number[] = await this.anime.findMissingAnime();
+      const scope = Number(req.params.scope) || 5000;
+      const missRanks: number[] = await this.anime.findMissingAnime(scope);
       res.status(200).json({ data: missRanks, status: 'success', message: 'findMissingAnime' });
     } catch (error) {
       next(error);

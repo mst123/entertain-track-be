@@ -84,6 +84,7 @@ const AnimeSchema = new Schema<Anime>({
       'radio',
       'music',
       'mixed_media',
+      'web_novel',
     ],
   },
   average_episode_duration: Number, // 平均集长

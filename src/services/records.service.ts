@@ -1,6 +1,6 @@
 import { Service } from 'typedi';
 import { HttpException } from '@exceptions/httpException';
-import { Record, RequestRecord } from '@interfaces/records.interface';
+import { Record, RecordBase } from '@interfaces/records.interface';
 import { RecordModel } from '@models/records.model';
 
 // 通过依赖注入的方式使用这个服务，而不需要手动实例化
@@ -22,17 +22,17 @@ export class RecordService {
     const latestRecord: Record = await RecordModel.findOne().sort({ createTime: -1 });
     return latestRecord;
   };
-  public async createRecord(recordData: RequestRecord): Promise<Record> {
+  public async createRecord(recordData: RecordBase): Promise<Record> {
     const createRecordData: Record = await RecordModel.create(recordData);
     return createRecordData;
   }
 
-  public async updateRecord(recordId: string, recordData: RequestRecord): Promise<Record> {
+  public async updateRecord(recordId: string, recordData: RecordBase): Promise<Record> {
     const updateRecordById: Record = await RecordModel.findByIdAndUpdate(recordId, { recordData });
     if (!updateRecordById) throw new HttpException(409, "Record doesn't exist");
     return updateRecordById;
   }
-  public async updateOrCreateRecord(recordId: string, recordData: RequestRecord): Promise<Record> {
+  public async updateOrCreateRecord(recordId: string, recordData: RecordBase): Promise<Record> {
     const createRecordData: Record = await RecordModel.findOneAndUpdate({ recordId }, recordData, {
       new: true,
       upsert: true,

@@ -12,9 +12,10 @@ export async function getRecord(type: 'animeOffset' | 'mangaOffset') {
 
 export async function setRecord(type: 'animeOffset' | 'mangaOffset', value: number) {
   try {
-    const record = JSON.parse(await readFile(resolve(__dirname, `./local-storage/record.txt`), 'utf-8').toString());
+    const recordStr: string = (await readFile(resolve(__dirname, `../local-storage/record.json`), 'utf-8')).toString();
+    const record = JSON.parse(recordStr);
     record[type] = value;
-    await writeFile(resolve(__dirname, `./local-storage/record.txt`), JSON.stringify(record));
+    await writeFile(resolve(__dirname, `../local-storage/record.json`), JSON.stringify(record));
   } catch (error) {
     console.log(error);
   }

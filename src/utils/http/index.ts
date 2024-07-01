@@ -1,27 +1,42 @@
 import Axios, { type AxiosInstance, type Method, type AxiosRequestConfig, type AxiosResponse, type CustomParamsSerializer } from 'axios';
 import { stringify } from 'qs';
 
-// 相关配置请参考：www.axios-js.com/zh-cn/docs/#axios-request-config-1
 const defaultConfig: AxiosRequestConfig = {
+  // 请求超时时间
+  timeout: 30000,
+  baseURL: '/',
+  paramsSerializer: {
+    serialize: stringify as unknown as CustomParamsSerializer,
+  },
+};
+// 相关配置请参考：www.axios-js.com/zh-cn/docs/#axios-request-config-1
+const animeConfig: AxiosRequestConfig = {
   // 请求超时时间
   timeout: 30000,
   baseURL: 'https://api.myanimelist.net/v2/',
   headers: {
     'X-MAL-CLIENT-ID': '6ce00a71791d4866699ec1de1bea1811',
   },
-  // 数组格式参数序列化（https://github.com/axios/axios/issues/5142）
-  paramsSerializer: {
-    serialize: stringify as unknown as CustomParamsSerializer,
-  },
+};
+
+const gameConfig: AxiosRequestConfig = {
+  // 请求超时时间
+  timeout: 30000,
+  baseURL: 'http://api.steampowered.com/',
 };
 
 class MyHttp {
   /** 初始化配置对象 */
-  private static initConfig: AxiosRequestConfig = {};
+  private initConfig: AxiosRequestConfig;
 
   /** 保存当前Axios实例对象 */
-  private static axiosInstance: AxiosInstance = Axios.create({ ...defaultConfig, ...MyHttp.initConfig });
+  private static axiosInstance: AxiosInstance;
 
+  /** 构造函数，接受自定义配置 */
+  constructor(initConfig: AxiosRequestConfig = {}) {
+    this.initConfig = initConfig;
+    MyHttp.axiosInstance = Axios.create({ ...defaultConfig, ...this.initConfig });
+  }
   /** 通用请求工具函数 */
   public request<T, P>(method: Method, url: string, param: T, config: AxiosRequestConfig): Promise<P> {
     const hasData = ['post', 'put', 'patch', 'delete'].includes(method);
@@ -70,4 +85,5 @@ class MyHttp {
   }
 }
 
-export const myHttp = new MyHttp();
+export const myHttp = new MyHttp(animeConfig);
+export const steamHttp = new MyHttp(gameConfig);

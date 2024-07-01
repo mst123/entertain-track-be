@@ -7,7 +7,7 @@ import { type MissingRanks, getMissingRanks } from '@/utils/sync-my-anime/comput
 import { getRecord, setRecord } from '@/utils/sync-my-anime/tools';
 
 const LIMIT = 20;
-const MAX_OFFSET = 3000;
+const MAX_OFFSET = 5000;
 
 const animeService = Container.get(AnimeService);
 
@@ -104,7 +104,7 @@ export class AnimeSpider {
   // 第二步 补充失败的数据
   public async getAnimeInMissing() {
     try {
-      const missingRanks: MissingRanks = await getMissingRanks();
+      const missingRanks: MissingRanks = await getMissingRanks(MAX_OFFSET);
       if (missingRanks.length) {
         const curRanks = [...missingRanks];
         console.log(curRanks);
@@ -147,19 +147,14 @@ export class AnimeSpider {
           );
         })
         .catch(async error => {
-          logger.error(`
-            在offset ${this.offset} 处出现-网络问题-, 问题如下：
-              ${JSON.stringify(error, null, 2)}
-          `);
-          if (retryCount >= 3) {
-            console.log('超过3次');
-
+          // logger.error(`
+          //   在offset ${this.offset} 处出现-网络问题-, 问题如下：
+          //     ${JSON.stringify(error, null, 2)}
+          // `);
+          if (retryCount >= 5) {
             reject(error);
           } else {
-            // await this.waitMoment(0.5 * retryCount);
-            console.log(retryCount);
-
-            await this.waitMoment(0.1);
+            await this.waitMoment(0.1 * retryCount);
             return await this.getAnimes(offset, limit, retryCount + 1);
           }
         });
@@ -169,9 +164,9 @@ export class AnimeSpider {
   private async createAnime(anime) {
     // 几乎不会创建失败
     try {
-      await animeService.createAnime(anime);
+      await animeService.createOrUpdateAnime(anime);
     } catch (error) {
-      console.log('创建失败：');
+      console.log('创建失败：', error);
       // 不让此类错误打断进程
       return Promise.resolve();
     }

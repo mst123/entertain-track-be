@@ -36,21 +36,30 @@ export class AnimeService {
     return deleteAnimeById;
   }
 
-  public async findMissingAnime(): Promise<number[]> {
-    // const animes: Anime[] = await AnimeModel.find();
-    // 创建一个包含所有存在的 rank 值的 Set
-    // const existingRanks = new Set(animes.map(anime => anime.rank));
-
-    // // 创建一个包含所有期望的 rank 值的 Set
-    // const expectedRanks = new Set(Array.from({ length: 10000 }, (_, i) => i + 1));
-
-    // // 计算缺失的 rank
-    // const missingRanks = [...expectedRanks].filter(rank => !existingRanks.has(rank));
-
+  public async findMissingAnime(scope: number): Promise<number[]> {
     const missingRanks = await AnimeModel.aggregate([
       { $group: { _id: null, ranks: { $push: '$rank' } } },
-      { $project: { _id: 0, missingRanks: { $setDifference: [{ $range: [1, 10001] }, '$ranks'] } } },
+      { $project: { _id: 0, missingRanks: { $setDifference: [{ $range: [1, scope + 1] }, '$ranks'] } } },
     ]);
     return missingRanks[0].missingRanks;
+  }
+
+  // 因为anime rank经常更新 所以遇到重复的anime 直接更新ranks
+  public async createOrUpdateAnime(animeData: Anime): Promise<Anime> {
+    const findAnime: Anime = await AnimeModel.findOne({ id: animeData.id });
+    if (!findAnime) {
+      const createAnimeData: Anime = await AnimeModel.create(animeData);
+      console.log('创建一条');
+      return createAnimeData;
+    } else {
+      // 更新已存在的文档
+      let updatedAnime: Anime = null;
+      if (findAnime.rank !== animeData.rank) {
+        findAnime.rank = animeData.rank;
+        updatedAnime = await findAnime.save();
+        console.log('更新一条');
+      }
+      return updatedAnime;
+    }
   }
 }

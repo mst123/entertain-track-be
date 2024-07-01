@@ -1,4 +1,4 @@
-import { Router } from 'express';
+import { Router, type Router as ExpressRouter } from 'express';
 import { UserController } from '@controllers/users.controller';
 import { CreateUserDto } from '@dtos/users.dto';
 import { Routes } from '@interfaces/routes.interface';
@@ -6,7 +6,7 @@ import { ValidationMiddleware } from '@middlewares/validation.middleware';
 import { AuthMiddleware, RoleMiddleware, IsMeMiddleware } from '@/middlewares/auth.middleware';
 export class UserRoute implements Routes {
   public path = '/users';
-  public router = Router();
+  public router: ExpressRouter = Router();
   public user = new UserController();
 
   constructor() {

@@ -14,6 +14,9 @@ import { Routes } from '@interfaces/routes.interface';
 import { ErrorMiddleware } from '@middlewares/error.middleware';
 import { logger, stream } from '@utils/logger';
 import { AnimeSpider } from '@/utils/sync-my-anime';
+import { MangaSpider } from '@/utils/sync-my-manga';
+import { GameSpider } from '@/utils/sync-my-game';
+
 export class App {
   public app: express.Application;
   public env: string;
@@ -30,7 +33,8 @@ export class App {
     this.initializeSwagger();
     this.initializeErrorHandling();
     // 从MyAnimeList获取数据
-    IS_SPIDER_MODEL && this.getMyAnimeListDataBase();
+    // IS_SPIDER_MODEL && this.getMyAnimeListDataBase();
+    IS_SPIDER_MODEL && this.getMyGameListDataBase();
   }
 
   public listen() {
@@ -90,5 +94,14 @@ export class App {
   private getMyAnimeListDataBase() {
     const animeSpider = new AnimeSpider();
     animeSpider.start();
+  }
+  private getMyMangaListDataBase() {
+    const mangaSpider = new MangaSpider();
+    mangaSpider.start();
+  }
+
+  private getMyGameListDataBase() {
+    const gameSpider = new GameSpider();
+    gameSpider.start();
   }
 }

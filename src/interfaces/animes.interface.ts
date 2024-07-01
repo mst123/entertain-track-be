@@ -1,5 +1,4 @@
 import { Document } from 'mongoose';
-import { type } from 'os';
 
 // 定义枚举类型
 type NSFW = 'white' | 'gray' | 'black';
@@ -43,7 +42,8 @@ type Source =
   | 'picture_book'
   | 'radio'
   | 'music'
-  | 'mixed_media';
+  | 'mixed_media'
+  | 'web_novel';
 
 export type Fields =
   | 'id'

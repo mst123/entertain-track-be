@@ -1,10 +1,10 @@
-import { Router } from 'express';
+import { Router, type Router as ExpressRouter } from 'express';
 import { AnimeController } from '@controllers/animes.controller';
 import { Routes } from '@interfaces/routes.interface';
 
 export class AnimeRoute implements Routes {
   public path = '/animes';
-  public router = Router();
+  public router: ExpressRouter = Router();
   public anime = new AnimeController();
 
   constructor() {
@@ -18,6 +18,6 @@ export class AnimeRoute implements Routes {
     this.router.put(`${this.path}/:id`, this.anime.updateAnime);
     this.router.delete(`${this.path}/:id`, this.anime.deleteAnime);
 
-    this.router.post(`${this.path}/findMissingAnime`, this.anime.findMissingAnime);
+    this.router.post(`${this.path}/findMissingAnime/:scope`, this.anime.findMissingAnime);
   }
 }
