@@ -18,6 +18,7 @@ export class FileRoute implements Routes {
     this.router.get(`${this.path}`, this.fileController.getFileDetails);
     this.router.get(`${this.path}/:id`, genDownloadFile, this.fileController.genDownloadLink);
     this.router.post(`${this.path}/:id`, genDownloadFile, this.fileController.genDownloadLink);
+    // 删除缓存
     this.router.get(`${this.path}/delete`, this.fileController.clearUploads);
   }
 }

@@ -2,12 +2,10 @@ import { Service } from 'typedi';
 import fs from 'fs';
 import { FileModel } from '@/models/files.model';
 import bcrypt from 'bcrypt';
-import { getTinyUrl, deleteUploads } from '@/utils/file/index';
+import { deleteUploads } from '@/utils/file/index';
 
 @Service()
 export class FileService {
-  private origin = process.env.NODE_ENV === 'production' ? 'https://fileshare-fikr.onrender.com' : 'http://localhost:3000';
-
   public async uploadFile(fileData: Express.Multer.File, password?: string) {
     if (await this.isFileExists(fileData.originalname)) {
       throw new Error(`File with name ${fileData.originalname} already exists`);
@@ -19,15 +17,8 @@ export class FileService {
     }
 
     const file = new FileModel(fileData);
-    let fileLink;
 
-    if (process.env.NODE_ENV === 'production') {
-      fileLink = await getTinyUrl(process.env.ACCESS_TOKEN, `${this.origin}/api/v2/file/${file._id}`);
-      file.shortUrl = fileLink;
-    } else {
-      fileLink = `${this.origin}/api/v2/file/${file._id}`;
-      file.longUrl = fileLink;
-    }
+    file.longUrl = `/api/files/${file._id}`;
 
     await file.save();
     return file;
@@ -38,7 +29,7 @@ export class FileService {
   }
 
   public async getFileDetails(query) {
-    return FileModel.find(query).select('protected encoding size downloadCount createdAt');
+    return FileModel.find(query).select('protected originalname longUrl size downloadCount createdAt');
   }
 
   public clearUploads(): boolean {
