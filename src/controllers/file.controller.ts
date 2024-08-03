@@ -25,7 +25,7 @@ export class FileController {
 
       return res.status(201).send({
         message: 'Your file is uploaded',
-        longurl: `/api/v1/file/${file._id}`,
+        longurl: `/api/v1/files/${file._id}`,
         shortUrl: file.shortUrl,
         protected: file.protected,
       });

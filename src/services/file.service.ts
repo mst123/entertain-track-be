@@ -4,13 +4,19 @@ import { FileModel } from '@/models/files.model';
 import bcrypt from 'bcrypt';
 import { deleteUploads } from '@/utils/file/index';
 
+// 拓展file属性
+interface FileExtendProp {
+  password?: string;
+  protected: Boolean;
+}
 @Service()
 export class FileService {
-  public async uploadFile(fileData: Express.Multer.File, password?: string) {
-    if (await this.isFileExists(fileData.originalname)) {
-      throw new Error(`File with name ${fileData.originalname} already exists`);
-    }
-
+  public async uploadFile(fileData: Express.Multer.File & FileExtendProp, password?: string) {
+    const existingFile = await FileModel.findOne({ originalname: fileData.originalname });
+    // if (await this.isFileExists(fileData.originalname)) {
+    //   throw new Error(`File with name ${fileData.originalname} already exists`);
+    // }
+    if (existingFile) return existingFile;
     if (password) {
       fileData.password = await bcrypt.hash(password, 8);
       fileData.protected = true;

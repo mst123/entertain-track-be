@@ -14,3 +14,8 @@ interface UserBase {
 
 export interface User extends Document, UserBase {}
 export type RequestUser = UserBase;
+
+export interface Refresh {
+  refreshToken: String;
+  expiresIn: Number;
+}

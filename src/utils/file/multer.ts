@@ -2,7 +2,8 @@ import multer from 'multer';
 const storage = multer.memoryStorage();
 const multerConfigs = {
   limits: {
-    fileSize: 15000000,
+    // 文件大小限制在 15MB
+    fileSize: 15 * 1024 * 1024,
   },
   fileFilter(req, file, cb) {
     file.originalname = Buffer.from(file.originalname, 'latin1').toString('utf8');

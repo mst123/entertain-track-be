@@ -8,7 +8,7 @@ import hpp from 'hpp';
 import morgan from 'morgan';
 import swaggerJSDoc from 'swagger-jsdoc';
 import swaggerUi from 'swagger-ui-express';
-import { NODE_ENV, PORT, LOG_FORMAT, ORIGIN, CREDENTIALS, IS_SPIDER_MODEL } from '@config';
+import { NODE_ENV, PORT, LOG_FORMAT, ORIGIN, CREDENTIALS, SPIDER_TYPE } from '@config';
 import { dbConnection } from '@database';
 import { Routes } from '@interfaces/routes.interface';
 import { ErrorMiddleware } from '@middlewares/error.middleware';
@@ -32,9 +32,12 @@ export class App {
     this.initializeRoutes(routes);
     this.initializeSwagger();
     this.initializeErrorHandling();
-    // 从MyAnimeList获取数据
-    // IS_SPIDER_MODEL && this.getMyAnimeListDataBase();
-    IS_SPIDER_MODEL && this.getMyGameListDataBase();
+    // 爬取逻辑
+    if (SPIDER_TYPE) {
+      SPIDER_TYPE === 'anime' && this.getMyAnimeListDataBase();
+      SPIDER_TYPE === 'manga' && this.getMyMangaListDataBase();
+      SPIDER_TYPE === 'game' && this.getMyGameListDataBase();
+    }
   }
 
   public listen() {
