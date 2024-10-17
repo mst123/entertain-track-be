@@ -1,4 +1,4 @@
-import { model, Schema, Document } from 'mongoose';
+import { model, Schema } from 'mongoose';
 import bcrypt from 'bcrypt';
 import { File } from '@/interfaces/files.interface';
 
@@ -75,4 +75,4 @@ fileSchema.methods.checkPassword = function (password: string) {
   });
 };
 
-export const FileModel = model<File & Document>('File', fileSchema);
+export const FileModel = model<File>('File', fileSchema);

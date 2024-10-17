@@ -27,7 +27,7 @@ const MenuSchema = new Schema<Menu>({
       comment: { type: String, required: true }, // 评论内容，必填
     },
   ],
-  improvements: { type: [String], required: true }, // 后续改进的部分，必填
+  improvements: { type: String }, // 后续改进的部分
 });
 
 // 导出菜单模型

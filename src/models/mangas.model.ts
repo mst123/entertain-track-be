@@ -1,4 +1,4 @@
-import { model, Schema, Document } from 'mongoose';
+import { model, Schema } from 'mongoose';
 import { Manga } from '@/interfaces/mangas.interface';
 
 // Manga 的 Schema 定义
@@ -125,4 +125,4 @@ const MangaSchema = new Schema<Manga>({
 // 建立id的索引
 MangaSchema.index({ id: 1 });
 
-export const MangaModel = model<Manga & Document>('Manga', MangaSchema);
+export const MangaModel = model<Manga>('Manga', MangaSchema);

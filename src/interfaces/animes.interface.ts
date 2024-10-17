@@ -198,6 +198,5 @@ export interface AnimeBase {
   statistics: Statistics; // 统计信息
   [key: string]: any;
 }
-export interface Anime extends Document, AnimeBase {
-  id: number;
-}
+
+export type Anime = Document & AnimeBase;

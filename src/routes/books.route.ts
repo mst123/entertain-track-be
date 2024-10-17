@@ -1,21 +1,17 @@
-import { Router, type Router as ExpressRouter } from 'express';
 import { BookController } from '@controllers/books.controller';
-import { Routes } from '@interfaces/routes.interface';
+import { BaseRoute } from './base.route';
 
-export class BookRoute implements Routes {
-  public path = '/books';
-  public router: ExpressRouter = Router();
+export class BookRoute extends BaseRoute {
   public book = new BookController();
 
   constructor() {
+    super('/books');
     this.initializeRoutes();
   }
 
-  private initializeRoutes() {
-    this.router.get(`${this.path}`, this.book.getBooks);
-    this.router.get(`${this.path}/:id`, this.book.getBookById);
-    this.router.post(`${this.path}`, this.book.createBook);
-    this.router.put(`${this.path}/:id`, this.book.updateBook);
-    this.router.delete(`${this.path}/:id`, this.book.deleteBook);
+  protected initializeRoutes() {
+    // tags需要放在前边，优先匹配
+    this.router.get(`${this.path}/tags`, this.book.getTags);
+    this.initializeCrudRoutes(this.book);
   }
 }

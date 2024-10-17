@@ -27,4 +27,4 @@ export interface CustomRequest extends Request {
 }
 
 // file 文档的接口定义
-export interface File extends Document, FileBase {}
+export type File = Document & FileBase;

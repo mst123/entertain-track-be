@@ -29,8 +29,8 @@ interface MenuBase {
   notes: string; // 注意事项
   steps: Step[]; // 步骤，时间轴体现，同一个可以有多个操作
   image: string; // 做成后的图片
-  reviews: Review[]; // 评价列表
-  improvements: string[]; // 后续改进的部分
+  reviews?: Review[]; // 评价列表
+  improvements?: string; // 后续改进的部分
 }
 
-export interface Menu extends Document, MenuBase {}
+export type Menu = Document & MenuBase;

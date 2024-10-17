@@ -10,4 +10,5 @@ export interface BookBase {
   status: '想看' | '正在看' | '看过' | '无'; // 状态
 }
 
-export interface Book extends Document, BookBase {}
+// export interface Book extends Document, BookBase {}
+export type Book = Document & BookBase;

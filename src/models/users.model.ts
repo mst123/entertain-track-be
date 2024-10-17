@@ -1,4 +1,4 @@
-import { model, Schema, Document } from 'mongoose';
+import { model, Schema } from 'mongoose';
 import { User } from '@interfaces/users.interface';
 import crypto from 'crypto';
 // 用户 Schema
@@ -50,4 +50,4 @@ UserSchema.methods.createPasswordResetToken = function () {
   return resetToken;
 };
 
-export const UserModel = model<User & Document>('User', UserSchema);
+export const UserModel = model<User>('User', UserSchema);

@@ -7,4 +7,5 @@ export interface RecordBase {
   offset: number;
   createTime?: Date;
 }
-export interface Record extends Document, RecordBase {}
+
+export type Record = Document & RecordBase;

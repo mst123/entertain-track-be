@@ -1,39 +1,13 @@
 import { Service } from 'typedi';
-import { HttpException } from '@exceptions/httpException';
-import { Manga } from '@interfaces/mangas.interface';
+import { Manga, MangaBase } from '@interfaces/mangas.interface';
 import { MangaModel } from '@models/mangas.model';
+import { BaseService } from './base.service';
 
 // 通过依赖注入的方式使用这个服务，而不需要手动实例化
 @Service()
-export class MangaService {
-  public async findAllManga(): Promise<Manga[]> {
-    const mangas: Manga[] = await MangaModel.find();
-    return mangas;
-  }
-
-  public async findMangaById(mangaId: string): Promise<Manga> {
-    const findManga: Manga = await MangaModel.findOne({ _id: mangaId });
-    if (!findManga) throw new HttpException(409, "Manga doesn't exist");
-
-    return findManga;
-  }
-
-  public async createManga(mangaData: Manga): Promise<Manga> {
-    const createMangaData: Manga = await MangaModel.create(mangaData);
-    return createMangaData;
-  }
-
-  public async updateManga(mangaId: string, mangaData: Manga): Promise<Manga> {
-    const updateMangaById: Manga = await MangaModel.findByIdAndUpdate(mangaId, { mangaData });
-    if (!updateMangaById) throw new HttpException(409, "Manga doesn't exist");
-    return updateMangaById;
-  }
-
-  public async deleteManga(mangaId: string): Promise<Manga> {
-    const deleteMangaById: Manga = await MangaModel.findByIdAndDelete(mangaId);
-    if (!deleteMangaById) throw new HttpException(409, "Manga doesn't exist");
-
-    return deleteMangaById;
+export class MangaService extends BaseService<Manga, MangaBase> {
+  constructor() {
+    super(MangaModel);
   }
 
   public async findMissingManga(scope: number): Promise<number[]> {

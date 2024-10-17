@@ -1,4 +1,4 @@
-import { model, Schema, Document } from 'mongoose';
+import { model, Schema } from 'mongoose';
 import { Anime } from '@/interfaces/animes.interface';
 
 // Anime 的 Schema 定义
@@ -171,4 +171,4 @@ const AnimeSchema = new Schema<Anime>({
 // 建立id的索引
 AnimeSchema.index({ id: 1 });
 
-export const AnimeModel = model<Anime & Document>('Anime', AnimeSchema);
+export const AnimeModel = model<Anime>('Anime', AnimeSchema);

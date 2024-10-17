@@ -1,7 +1,7 @@
 import { Response, NextFunction } from 'express';
 import { Container } from 'typedi';
 import { FileService } from '@/services/file.service';
-import { CustomRequest } from '@/interfaces/files.interface';
+import { CustomRequest, File } from '@/interfaces/files.interface';
 
 export class FileController {
   private fileService = Container.get(FileService);
@@ -38,12 +38,12 @@ export class FileController {
     try {
       const { file, downloadPath, originalname } = req;
 
-      if (file.password && (!req.query.password || !(await this.fileService.checkPassword(file, req.query.password)))) {
+      if (file.password && (!req.query.password || !(await this.fileService.checkPassword(file, req.query.password as string)))) {
         return res.status(400).send({ message: 'Password is required to download this file' });
       }
 
       file.downloadCount += 1;
-      await file.save();
+      await (file as File).save();
 
       setTimeout(() => this.fileService.deleteUploads(), 5000);
 

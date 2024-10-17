@@ -1,4 +1,4 @@
-import { model, Schema, Document } from 'mongoose';
+import { model, Schema } from 'mongoose';
 import { Game } from '@/interfaces/games.interface';
 
 // Game 的 Schema 定义
@@ -31,4 +31,4 @@ const GameSchema = new Schema<Game>({
 // 建立id的索引
 GameSchema.index({ appid: 1 });
 
-export const GameModel = model<Game & Document>('Game', GameSchema);
+export const GameModel = model<Game>('Game', GameSchema);

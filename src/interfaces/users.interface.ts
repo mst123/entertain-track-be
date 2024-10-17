@@ -12,10 +12,10 @@ interface UserBase {
   active: boolean;
 }
 
-export interface User extends Document, UserBase {}
-export type RequestUser = UserBase;
-
 export interface Refresh {
   refreshToken: String;
   expiresIn: Number;
 }
+
+export type RequestUser = UserBase;
+export type User = Document & UserBase;

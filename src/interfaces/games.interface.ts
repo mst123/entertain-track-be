@@ -18,4 +18,4 @@ export interface GameBase {
   rtime_last_played: number;
 }
 // game 文档的接口定义
-export interface Game extends Document, GameBase {}
+export type Game = Document & GameBase;

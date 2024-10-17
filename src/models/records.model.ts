@@ -1,4 +1,4 @@
-import { model, Schema, Document } from 'mongoose';
+import { model, Schema } from 'mongoose';
 import { Record } from '@interfaces/records.interface';
 
 // 记录表 Schema
@@ -17,4 +17,4 @@ const RecordSchema = new Schema<Record>({
 // 建立创建时间的倒序索引
 RecordSchema.index({ createTime: -1 });
 
-export const RecordModel = model<Record & Document>('Record', RecordSchema);
+export const RecordModel = model<Record>('Record', RecordSchema);

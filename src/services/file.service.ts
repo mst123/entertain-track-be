@@ -7,7 +7,7 @@ import { deleteUploads } from '@/utils/file/index';
 // 拓展file属性
 interface FileExtendProp {
   password?: string;
-  protected: Boolean;
+  protected?: Boolean;
 }
 @Service()
 export class FileService {

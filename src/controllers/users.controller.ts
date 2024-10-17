@@ -1,63 +1,9 @@
-import { NextFunction, Request, Response } from 'express';
-import { Container } from 'typedi';
 import { User } from '@interfaces/users.interface';
 import { UserService } from '@services/users.service';
+import { BaseController } from './base.controller';
 
-export class UserController {
-  public user = Container.get(UserService);
-
-  public getUsers = async (req: Request, res: Response, next: NextFunction) => {
-    try {
-      const findAllUsersData: User[] = await this.user.findAllUser();
-
-      res.status(200).json({ data: findAllUsersData, status: 'success', message: 'findAll' });
-    } catch (error) {
-      next(error);
-    }
-  };
-
-  public getUserById = async (req: Request, res: Response, next: NextFunction) => {
-    try {
-      const userId: string = req.params.id;
-      const findOneUserData: User = await this.user.findUserById(userId);
-
-      res.status(200).json({ data: findOneUserData, status: 'success', message: 'findOne' });
-    } catch (error) {
-      next(error);
-    }
-  };
-
-  public createUser = async (req: Request, res: Response, next: NextFunction) => {
-    try {
-      const userData: User = req.body;
-      const createUserData: User = await this.user.createUser(userData);
-
-      res.status(201).json({ data: createUserData, status: 'success', message: 'created' });
-    } catch (error) {
-      next(error);
-    }
-  };
-
-  public updateUser = async (req: Request, res: Response, next: NextFunction) => {
-    try {
-      const userId: string = req.params.id;
-      const userData: User = req.body;
-      const updateUserData: User = await this.user.updateUser(userId, userData);
-
-      res.status(200).json({ data: updateUserData, status: 'success', message: 'updated' });
-    } catch (error) {
-      next(error);
-    }
-  };
-
-  public deleteUser = async (req: Request, res: Response, next: NextFunction) => {
-    try {
-      const userId: string = req.params.id;
-      const deleteUserData: User = await this.user.deleteUser(userId);
-
-      res.status(200).json({ data: deleteUserData, status: 'success', message: 'deleted' });
-    } catch (error) {
-      next(error);
-    }
-  };
+export class UserController extends BaseController<User> {
+  constructor() {
+    super(UserService);
+  }
 }

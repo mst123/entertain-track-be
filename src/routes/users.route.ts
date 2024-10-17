@@ -14,10 +14,11 @@ export class UserRoute implements Routes {
   }
 
   private initializeRoutes() {
-    this.router.get(`${this.path}`, AuthMiddleware, RoleMiddleware(['admin']), this.user.getUsers);
-    this.router.get(`${this.path}/:id`, AuthMiddleware, IsMeMiddleware, this.user.getUserById);
-    this.router.post(`${this.path}`, ValidationMiddleware(CreateUserDto), this.user.createUser);
-    this.router.put(`${this.path}/:id`, ValidationMiddleware(CreateUserDto, true), this.user.updateUser);
-    this.router.delete(`${this.path}/:id`, this.user.deleteUser);
+    this.router.get(`${this.path}`, AuthMiddleware, RoleMiddleware(['admin']), this.user.getAll);
+    this.router.get(`${this.path}/:id`, AuthMiddleware, IsMeMiddleware, this.user.getById);
+    this.router.post(`${this.path}`, ValidationMiddleware(CreateUserDto), this.user.create);
+    this.router.put(`${this.path}/:id`, ValidationMiddleware(CreateUserDto, true), this.user.update);
+    // TODO 不允许删除用户,目前没做限制
+    this.router.delete(`${this.path}/:id`, this.user.delete);
   }
 }

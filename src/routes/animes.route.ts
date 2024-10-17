@@ -1,23 +1,16 @@
-import { Router, type Router as ExpressRouter } from 'express';
 import { AnimeController } from '@controllers/animes.controller';
-import { Routes } from '@interfaces/routes.interface';
+import { BaseRoute } from './base.route';
 
-export class AnimeRoute implements Routes {
-  public path = '/animes';
-  public router: ExpressRouter = Router();
+export class AnimeRoute extends BaseRoute {
   public anime = new AnimeController();
 
   constructor() {
+    super('/animes');
     this.initializeRoutes();
   }
 
-  private initializeRoutes() {
-    this.router.get(`${this.path}`, this.anime.getAnimes);
-    this.router.get(`${this.path}/:id`, this.anime.getAnimeById);
-    this.router.post(`${this.path}`, this.anime.createAnime);
-    this.router.put(`${this.path}/:id`, this.anime.updateAnime);
-    this.router.delete(`${this.path}/:id`, this.anime.deleteAnime);
-
+  protected initializeRoutes() {
+    this.initializeCrudRoutes(this.anime);
     this.router.post(`${this.path}/findMissingAnime/:scope`, this.anime.findMissingAnime);
   }
 }
