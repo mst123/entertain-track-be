@@ -16,10 +16,10 @@ const MenuSchema = new Schema<Menu>({
     {
       description: { type: String, required: true }, // 步骤描述，必填
       duration: { type: Number, required: true }, // 持续时间，以分钟为单位，必填
-      actions: { type: [String], required: true }, // 操作列表，必填
+      actions: { type: [String] }, // 操作列表
     },
   ],
-  image: { type: String, required: true }, // 做成后的图片，必填
+  image: { type: [String], required: true }, // 做成后的图片，必填
   reviews: [
     {
       reviewer: { type: String, required: true }, // 评价人，必填

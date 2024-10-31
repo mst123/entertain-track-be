@@ -21,14 +21,14 @@ interface Review {
 }
 
 // 菜单的接口
-interface MenuBase {
+export interface MenuBase {
   name: string; // 菜单名称
   ingredients: Ingredient[]; // 配菜列表
   servings: number; // 几人份
   preparation: string; // 配菜加工
   notes: string; // 注意事项
   steps: Step[]; // 步骤，时间轴体现，同一个可以有多个操作
-  image: string; // 做成后的图片
+  image: string[]; // 做成后的图片
   reviews?: Review[]; // 评价列表
   improvements?: string; // 后续改进的部分
 }

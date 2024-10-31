@@ -5,6 +5,7 @@ import { AnimeRoute } from '@routes/animes.route';
 import { MangaRoute } from '@routes/mangas.route';
 import { RecordRoute } from '@routes/records.route';
 import { GameRoute } from '@routes/games.route';
+import { MenuRoute } from '@routes/menus.route';
 import { BookRoute } from '@routes/books.route';
 import { FileRoute } from '@routes/files.route';
 import { ValidateEnv } from '@utils/validateEnv';
@@ -18,6 +19,7 @@ const app = new App([
   new MangaRoute(),
   new RecordRoute(),
   new GameRoute(),
+  new MenuRoute(),
   new BookRoute(),
   new FileRoute(),
 ]);
