@@ -89,7 +89,7 @@ export class AnimeSpider {
         await Promise.all(
           animes.map(anime => {
             return this.createAnime(anime);
-          }),
+          })
         );
         await setRecord('animeOffset', this.offset);
         // 全部成功后在进行记录
@@ -115,7 +115,7 @@ export class AnimeSpider {
           await Promise.all(
             animes.map(anime => {
               return this.createAnime(anime);
-            }),
+            })
           );
         }
       } else {
@@ -143,7 +143,7 @@ export class AnimeSpider {
                 ...item.node,
                 offset,
               };
-            }),
+            })
           );
         })
         .catch(async error => {

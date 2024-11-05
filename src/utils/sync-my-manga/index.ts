@@ -82,7 +82,7 @@ export class MangaSpider {
         await Promise.all(
           mangas.map(manga => {
             return this.createManga(manga);
-          }),
+          })
         );
         await setRecord('mangaOffset', this.offset);
         // 全部成功后在进行记录
@@ -108,7 +108,7 @@ export class MangaSpider {
           await Promise.all(
             mangas.map(manga => {
               return this.createManga(manga);
-            }),
+            })
           );
         }
       } else {
@@ -136,7 +136,7 @@ export class MangaSpider {
                 ...item.node,
                 offset,
               };
-            }),
+            })
           );
         })
         .catch(async error => {

@@ -9,7 +9,7 @@ export class BaseController<T> {
 
   public getAll = async (req: Request, res: Response, next: NextFunction) => {
     try {
-      const data: T[] = await this.service.findAll(req.params);
+      const data: T[] = await this.service.findAll(req.query);
       res.status(200).json({ data, status: 'success', message: 'findAll' });
     } catch (error) {
       next(error);
@@ -40,6 +40,8 @@ export class BaseController<T> {
     try {
       const id: string = req.params.id;
       const data: T = req.body;
+      console.log(data, id);
+
       const updatedData: T = await this.service.update(id, data);
       res.status(200).json({ data: updatedData, status: 'success', message: 'updated' });
     } catch (error) {

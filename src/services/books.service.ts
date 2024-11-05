@@ -8,6 +8,26 @@ export class BookService extends BaseService<Book, BookBase> {
   constructor() {
     super(BookModel);
   }
+  public async findAll(body): Promise<Book[]> {
+    const { name, categories = [], status } = body;
+    console.log('body', body);
+
+    // 1. 构建 aggregate 管道
+    const pipeline = [
+      // $match 阶段：匹配查询条件
+      {
+        $match: {
+          ...(name && { name: { $regex: name, $options: 'i' } }), // 模糊匹配 name，不区分大小写
+          ...(status && { status }), // 精确匹配 status
+          ...(categories.length > 0 && { categories: { $in: categories } }), // categories 数组中包含任意一个元素
+        },
+      },
+    ];
+
+    // 2. 执行 aggregate 管道
+    const res = await BookModel.aggregate(pipeline);
+    return res;
+  }
 
   public async getTags(): Promise<string[]> {
     const Tags = await BookModel.aggregate([

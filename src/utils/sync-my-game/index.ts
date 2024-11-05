@@ -52,7 +52,7 @@ export class GameSpider {
   private async createGame(game) {
     // 几乎不会创建失败
     try {
-      await gameService.createGame(game);
+      await gameService.create(game);
     } catch (error) {
       console.log('创建失败：', error);
     }

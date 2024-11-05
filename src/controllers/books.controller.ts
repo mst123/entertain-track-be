@@ -7,6 +7,14 @@ export class BookController extends BaseController<Book> {
   constructor() {
     super(BookService);
   }
+  public getAll = async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const data: Book[] = await this.service.findAll(req.body);
+      res.status(200).json({ data, status: 'success', message: 'findAll' });
+    } catch (error) {
+      next(error);
+    }
+  };
   public getTags = async (req: Request, res: Response, next: NextFunction) => {
     try {
       const findAllTags: String[] = await this.service.getTags();
