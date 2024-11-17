@@ -25,36 +25,39 @@ export class GameSpider {
   }
   // 第一步 按顺序爬取数据
   public async start() {
-    this.getGame();
+    await this.getGame();
   }
 
   // 游戏列表
-  private getGame() {
-    steamHttp
-      .get<OwnGamesReq, OwnGamesResponse>('/IPlayerService/GetOwnedGames/v0001/', {
-        key: STEAM_KEY,
-        steamid: STEAM_ID,
-        format: 'json',
-        include_appinfo: true,
-        include_played_free_games: true,
-        language: 'zh',
-      })
-      .then(res => {
-        res.response.games.forEach(game => {
-          this.createGame(game);
-        });
-      })
-      .catch(async error => {
-        console.log(error);
-      });
+  private async getGame() {
+    const {
+      response: { games },
+    } = await steamHttp.get<OwnGamesReq, OwnGamesResponse>('/IPlayerService/GetOwnedGames/v0001/', {
+      key: STEAM_KEY,
+      steamid: STEAM_ID,
+      format: 'json',
+      include_appinfo: true,
+      include_played_free_games: true,
+      language: 'zh',
+    });
+
+    const promises = games.map(game => this.createGame(game));
+    await Promise.all(promises);
+    return 'success';
   }
 
   private async createGame(game) {
     // 几乎不会创建失败
     try {
-      await gameService.create(game);
+      // 首先查询是否存在
+      const existGame = await gameService.findAll({ appid: game.appid });
+      if (existGame.length > 0) {
+        return;
+      }
+      return await gameService.create(game);
     } catch (error) {
       console.log('创建失败：', error);
+      return error;
     }
   }
 }
