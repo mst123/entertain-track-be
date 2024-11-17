@@ -10,8 +10,6 @@ export class BookService extends BaseService<Book, BookBase> {
   }
   public async findAll(body): Promise<Book[]> {
     const { name, categories = [], status } = body;
-    console.log('body', body);
-
     // 1. 构建 aggregate 管道
     const pipeline = [
       // $match 阶段：匹配查询条件

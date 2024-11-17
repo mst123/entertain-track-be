@@ -9,6 +9,9 @@ export class MenuRoute extends BaseRoute {
   }
 
   protected initializeRoutes() {
+    this.router.get(`${this.path}/materials`, this.menu.getMaterials);
+    this.router.post(`${this.path}/query`, this.menu.getAll);
+
     this.initializeCrudRoutes(this.menu);
   }
 }
