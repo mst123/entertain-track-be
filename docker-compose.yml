@@ -1,55 +1,41 @@
-version: "3.9"
-
 services:
-  proxy:
-    container_name: proxy
-    image: nginx:alpine
-    ports:
-      - "80:80"
+  mongodb:
+    image: registry.cn-beijing.aliyuncs.com/mashitu/mongo:2.0.0
+    container_name: et-mg-container
     volumes:
-      - ./nginx.conf:/etc/nginx/nginx.conf
-    restart: "unless-stopped"
-    networks:
-      - backend
-
-  server:
-    container_name: server
-    build:
-      context: ./
-      dockerfile: Dockerfile.dev
-    ports:
-      - "3000:3000"
-    environment:
-      DB_HOST: localhost
-      DB_PORT: 27017
-      DB_DATABASE: dev
-    volumes:
-      - ./:/app
-      - /app/node_modules
-    restart: "unless-stopped"
-    networks:
-      - backend
-    links:
-      - mongo
-    depends_on:
-      - mongo
-
-  mongo:
-    container_name: mongo
-    image: mongo
+      - /db_data/mongodb_data:/data/db
+      - /db_data/mongodb_backup:/data/mongodb_backup
     ports:
       - "27017:27017"
-    environment:
-      DB_HOST: localhost
-      DB_PORT: 27017
-      DB_DATABASE: dev
     networks:
-      - backend
+      - et-network
+    user: "999:999"
+
+  backend:
+    image: registry.cn-beijing.aliyuncs.com/mashitu/et-be:latest
+    container_name: et-be-container
+    ports:
+      - "3000:3000"
+    depends_on:
+      - mongodb
+    environment:
+      - DB_HOST=et-mg-container
+    networks:
+      - et-network
+    pull_policy: always
+
+# 在容器里代理始终不好用
+  # frontend:
+  #   image: registry.cn-beijing.aliyuncs.com/mashitu/et-fe:latest
+  #   container_name: et-fe-container
+  #   depends_on:
+  #     - backend
+  #   network_mode: "host"
+  #   volumes:
+  #     - /entertain-track/fe:/usr/share/nginx/html
+  #   restart: always
+  #   pull_policy: always
 
 networks:
-  backend:
+  et-network:
     driver: bridge
-
-volumes:
-  data:
-    driver: local

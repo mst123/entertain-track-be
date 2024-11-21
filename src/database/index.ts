@@ -8,10 +8,11 @@ export const dbConnection = async () => {
       useUnifiedTopology: true,
     } as ConnectOptions,
   };
-
   if (NODE_ENV !== 'production') {
     mongoose.set('debug', true);
     mongoose.set('strictQuery', true);
+  } else {
+    mongoose.set('strictQuery', false);
   }
   await mongoose.connect(dbConfig.url, dbConfig.options);
   console.log('数据库连接成功');

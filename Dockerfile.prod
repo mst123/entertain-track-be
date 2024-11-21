@@ -1,5 +1,5 @@
-# NodeJS Version 16
-FROM node:16.18-buster-slim
+# NodeJS Version 20
+FROM node:20-alpine
 
 # Copy Dir
 COPY . ./app
@@ -11,9 +11,9 @@ WORKDIR /app
 RUN npm install --legacy-peer-deps
 
 # Set Env
-ENV NODE_ENV production
+ENV NODE_ENV=production
 
 EXPOSE 3000
 
 # Cmd script
-CMD ["npm", "run", "start"]
+CMD ["npm", "run", "deploy:prod"]
