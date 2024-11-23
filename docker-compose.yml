@@ -2,9 +2,18 @@ services:
   mongodb:
     image: registry.cn-beijing.aliyuncs.com/mashitu/mongo:2.0.0
     container_name: et-mg-container
+    command:
+      - mongod
+      - --auth
+      - --bind_ip_all
+      - --wiredTigerCacheSizeGB=1
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=admin
+      - MONGO_INITDB_ROOT_PASSWORD=Zero4096266!
     volumes:
-      - /db_data/mongodb_data:/data/db
+      - mongodb_data:/data/db
       - /db_data/mongodb_backup:/data/mongodb_backup
+      - ./mongo-init.js:/docker-entrypoint-initdb.d/mongo-init.js:ro
     ports:
       - "27017:27017"
     networks:
@@ -35,6 +44,11 @@ services:
   #     - /entertain-track/fe:/usr/share/nginx/html
   #   restart: always
   #   pull_policy: always
+
+# 声明命名卷
+volumes:
+  mongodb_data:
+    driver: local
 
 networks:
   et-network:
