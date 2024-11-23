@@ -8,8 +8,8 @@ services:
       - --bind_ip_all
       - --wiredTigerCacheSizeGB=1
     environment:
-      - MONGO_INITDB_ROOT_USERNAME=admin
-      - MONGO_INITDB_ROOT_PASSWORD=Zero4096266!
+      - MONGO_INITDB_ROOT_USERNAME=${MONGO_ROOT_USERNAME}
+      - MONGO_INITDB_ROOT_PASSWORD=${MONGO_ROOT_PASSWORD}
     volumes:
       - mongodb_data:/data/db
       - /db_data/mongodb_backup:/data/mongodb_backup
