@@ -8,14 +8,8 @@ export class GameService extends BaseService<Game, GameBase> {
   constructor() {
     super(GameModel);
   }
-  public async findAll(): Promise<Game[]> {
-    const pipeline = [
-      {
-        $sort: {
-          playtime_forever: -1 as -1, // 显式地指定为-1
-        },
-      },
-    ];
-    return await GameModel.aggregate(pipeline);
+  public async findAll(query): Promise<Game[]> {
+    const games = await GameModel.find(query);
+    return games.sort((a, b) => b.playtime_forever - a.playtime_forever);
   }
 }
