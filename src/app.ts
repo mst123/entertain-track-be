@@ -16,6 +16,7 @@ import { logger, stream } from '@utils/logger';
 import { AnimeSpider } from '@/utils/sync-my-anime';
 import { MangaSpider } from '@/utils/sync-my-manga';
 import { GameSpider } from '@/utils/sync-my-game';
+import multer from 'multer';
 
 export class App {
   public app: express.Application;
@@ -66,6 +67,22 @@ export class App {
     this.app.use(express.json());
     this.app.use(express.urlencoded({ extended: true }));
     this.app.use(cookieParser());
+    this.app.use((err: any, req: Request, res: Response, next: NextFunction) => {
+      if (err instanceof multer.MulterError) {
+        // 处理文件上传错误
+        return res.status(400).json({
+          message: '文件上传失败',
+          error: err.message,
+        });
+      }
+
+      // 处理其他错误
+      console.error(err);
+      res.status(500).json({
+        message: '服务器内部错误',
+        error: process.env.NODE_ENV === 'development' ? err.message : undefined,
+      });
+    });
   }
 
   private initializeRoutes(routes: Routes[]) {

@@ -2,7 +2,7 @@ import { HttpException } from '@exceptions/HttpException';
 import { Model } from 'mongoose';
 
 export abstract class BaseService<T, U> {
-  constructor(private readonly model: Model<T>) {
+  constructor(protected readonly model: Model<T>) {
     this.model = model;
   }
   public async findAll(query): Promise<T[]> {
