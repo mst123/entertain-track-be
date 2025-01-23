@@ -70,7 +70,7 @@ export class BillService extends BaseService<Bill, BillBase> {
 
   // 查询所有分类category
   public async findAllCategories(userID: string): Promise<string[]> {
-    return await this.model.distinct('category', { userID });
+    return await this.model.distinct('category', { userID, isDeleted: false });
   }
 
   public async uploadFiles(files: Express.Multer.File[], type: 'csv' | 'pdf', userID: string): Promise<UploadResult> {
@@ -155,11 +155,13 @@ export class BillService extends BaseService<Bill, BillBase> {
   }
 
   // 查询金额相同的多条记录
-  public async findBillsWithSameAmount(userID: string): Promise<Bill[]> {
+  public async findBillsWithSameAmount(body, userID: string): Promise<{ bills: Bill[]; total: number }> {
+    const { page = 1, pageSize = 30 } = body;
     const pipeline: PipelineStage[] = [
       {
         $match: {
           userID,
+          isDeleted: false,
         },
       },
       {
@@ -183,10 +185,21 @@ export class BillService extends BaseService<Bill, BillBase> {
       {
         $sort: {
           amount: -1,
+          date: -1,
+        },
+      },
+      {
+        $facet: {
+          bills: [{ $skip: (page - 1) * pageSize }, { $limit: pageSize }],
+          total: [{ $count: 'count' }],
         },
       },
     ];
 
-    return await this.model.aggregate(pipeline).exec();
+    const [result] = await this.model.aggregate(pipeline).exec();
+    return {
+      bills: result.bills,
+      total: result.total[0]?.count || 0,
+    };
   }
 }

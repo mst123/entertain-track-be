@@ -52,3 +52,9 @@ export interface UploadResult {
   insertedCount: number;
   updatedCount: number;
 }
+
+// 分页
+export interface Pagination {
+  bills: Bill[];
+  total: number;
+}

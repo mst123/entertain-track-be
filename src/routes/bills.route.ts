@@ -36,7 +36,7 @@ export class BillRoute extends BaseRoute {
     this.router.get(`${this.path}/categories`, this.bill.findAllCategories);
 
     // 假删除
-    this.router.delete(`${this.path}/fakeDelete`, this.bill.batchFakeDelete);
+    this.router.post(`${this.path}/fakeDelete`, this.bill.batchFakeDelete);
 
     // 复原
     this.router.put(`${this.path}/restore`, this.bill.batchRestore);
@@ -45,7 +45,7 @@ export class BillRoute extends BaseRoute {
     this.router.put(`${this.path}/update`, this.bill.batchUpdate);
 
     // 查询金额相同的多条记录
-    this.router.get(`${this.path}/sameAmount`, this.bill.findBillsWithSameAmount);
+    this.router.post(`${this.path}/sameAmount`, this.bill.findBillsWithSameAmount);
 
     // 创建、更新、删除、查询单个
     this.initializeCrudRoutes(this.bill);

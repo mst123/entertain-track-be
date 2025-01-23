@@ -1,4 +1,4 @@
-import { Bill, UploadResult } from '@/interfaces/bills.interface';
+import { Bill, UploadResult, Pagination } from '@/interfaces/bills.interface';
 import { BillService } from '@/services/bills.service';
 import { BaseController } from './base.controller';
 import { NextFunction, Request, Response } from 'express';
@@ -10,7 +10,7 @@ export class BillController extends BaseController<Bill> {
 
   public findAllPlus = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
     try {
-      const findAllBillsData: Bill[] = await this.service.findAllPlus(req.body, req.user._id);
+      const findAllBillsData: Pagination = await this.service.findAllPlus(req.body, req.user._id);
       res.status(200).json({ data: findAllBillsData, message: 'findAllPlus' });
     } catch (error) {
       next(error);
@@ -86,8 +86,11 @@ export class BillController extends BaseController<Bill> {
   // 查询金额相同的多条记录
   public findBillsWithSameAmount = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
     try {
-      const bills: Bill[] = await this.service.findBillsWithSameAmount(req.user._id);
-      res.status(200).json({ data: bills, message: 'findBillsWithSameAmount' });
+      const bills: Pagination = await this.service.findBillsWithSameAmount(req.body, req.user._id);
+      res.status(200).json({
+        data: bills,
+        message: 'findBillsWithSameAmount',
+      });
     } catch (error) {
       next(error);
     }
