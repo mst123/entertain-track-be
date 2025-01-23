@@ -18,7 +18,6 @@ services:
       - "27017:27017"
     networks:
       - et-network
-    user: "999:999"
 
   backend:
     image: registry.cn-beijing.aliyuncs.com/mashitu/et-be:latest
@@ -34,16 +33,16 @@ services:
     pull_policy: always
 
 # 在容器里代理始终不好用
-  # frontend:
-  #   image: registry.cn-beijing.aliyuncs.com/mashitu/et-fe:latest
-  #   container_name: et-fe-container
-  #   depends_on:
-  #     - backend
-  #   network_mode: "host"
-  #   volumes:
-  #     - /entertain-track/fe:/usr/share/nginx/html
-  #   restart: always
-  #   pull_policy: always
+  frontend:
+    image: registry.cn-beijing.aliyuncs.com/mashitu/et-fe:latest
+    container_name: et-fe-container
+    depends_on:
+      - backend
+    ports:
+      - "80:80"
+    networks:
+      - et-network
+    pull_policy: always
 
 # 声明命名卷
 volumes:
